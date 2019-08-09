@@ -2,7 +2,6 @@ package log4go_test
 
 import (
 	"bytes"
-	"context"
 	"log"
 	"testing"
 
@@ -19,10 +18,10 @@ func TestDefaultDebug(t *testing.T) {
 	log4go.SetFilter(filter)
 	log.SetFlags(log.LstdFlags & 0x0)
 
-	log4go.Debug(context.Background(), "1")
-	log4go.Info(context.Background(), "3")
-	log4go.Warn(context.Background(), "5")
-	log4go.Error(context.Background(), "7")
+	log4go.Debug("1")
+	log4go.Info("3")
+	log4go.Warn("5")
+	log4go.Error("7")
 
 	result := buf.String()
 	expected := "[DBUG]1\n[INFO]3\n[WARN]5\n[EROR]7\n"
@@ -41,10 +40,10 @@ func TestDefaultInfo(t *testing.T) {
 	}
 	log4go.SetFilter(filter)
 
-	log4go.Debug(context.Background(), "1")
-	log4go.Info(context.Background(), "3")
-	log4go.Warn(context.Background(), "5")
-	log4go.Error(context.Background(), "7")
+	log4go.Debug("1")
+	log4go.Info("3")
+	log4go.Warn("5")
+	log4go.Error("7")
 
 	result := buf.String()
 	expected := "[INFO]3\n[WARN]5\n[EROR]7\n"
@@ -63,10 +62,10 @@ func TestDefaultWarn(t *testing.T) {
 	}
 	log4go.SetFilter(filter)
 
-	log4go.Debug(context.Background(), "1")
-	log4go.Info(context.Background(), "3")
-	log4go.Warn(context.Background(), "5")
-	log4go.Error(context.Background(), "7")
+	log4go.Debug("1")
+	log4go.Info("3")
+	log4go.Warn("5")
+	log4go.Error("7")
 
 	result := buf.String()
 	expected := "[WARN]5\n[EROR]7\n"
@@ -85,10 +84,10 @@ func TestDefaultError(t *testing.T) {
 	}
 	log4go.SetFilter(filter)
 
-	log4go.Debug(context.Background(), "1")
-	log4go.Info(context.Background(), "3")
-	log4go.Warn(context.Background(), "5")
-	log4go.Error(context.Background(), "7")
+	log4go.Debug("1")
+	log4go.Info("3")
+	log4go.Warn("5")
+	log4go.Error("7")
 
 	result := buf.String()
 	expected := "[EROR]7\n"
