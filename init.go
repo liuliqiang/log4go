@@ -28,6 +28,7 @@ type Logger interface {
 	Warn(ctx context.Context, format string, v ...interface{})
 	Error(ctx context.Context, format string, v ...interface{})
 	SetFilter(filter *logutils.LevelFilter)
+	GetFilter() (filter *logutils.LevelFilter)
 }
 
 type LoggerOpts struct {
@@ -44,7 +45,7 @@ func NewLogger(name string, opts *LoggerOpts) (logger Logger) {
 			Writer:   os.Stdout,
 		}
 		log.SetOutput(filter)
-		logger = &log4GoLogger{formatOpts(opts)}
+		logger = &log4GoLogger{filter: filter, opts: formatOpts(opts)}
 		loggerMap[name] = logger
 	}
 

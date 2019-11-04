@@ -2,6 +2,7 @@ package log4go
 
 import (
 	"context"
+	"log"
 
 	"github.com/hashicorp/logutils"
 )
@@ -24,6 +25,16 @@ func Warn(format string, v ...interface{}) {
 
 func Error(format string, v ...interface{}) {
 	DefaultLogger().Error(context.Background(), format, v...)
+}
+
+func SetLevel(level logutils.LogLevel) {
+	f := DefaultLogger().GetFilter()
+	f.MinLevel = level
+	DefaultLogger().SetFilter(f)
+}
+
+func SetFlags(flag int) {
+	log.SetFlags(flag)
 }
 
 func SetFilter(filter *logutils.LevelFilter) {

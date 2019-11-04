@@ -10,11 +10,16 @@ import (
 )
 
 type log4GoLogger struct {
-	opts *LoggerOpts
+	filter *logutils.LevelFilter
+	opts   *LoggerOpts
+}
+
+func (l *log4GoLogger) GetFilter() (filter *logutils.LevelFilter) {
+	return l.filter
 }
 
 func (l *log4GoLogger) SetFilter(filter *logutils.LevelFilter) {
-	f := &logutils.LevelFilter{
+	l.filter = &logutils.LevelFilter{
 		Levels:   logLevel,
 		MinLevel: LogLevelInfo,
 		Writer:   filter.Writer,
@@ -28,12 +33,12 @@ func (l *log4GoLogger) SetFilter(filter *logutils.LevelFilter) {
 	case LogLevelWarn:
 		fallthrough
 	case LogLevelError:
-		f.MinLevel = filter.MinLevel
+		l.filter.MinLevel = filter.MinLevel
 	default:
-		f.MinLevel = LogLevelInfo
+		l.filter.MinLevel = LogLevelInfo
 	}
 
-	log.SetOutput(f)
+	log.SetOutput(l.filter)
 }
 
 func (l *log4GoLogger) Debug(ctx context.Context, format string, v ...interface{}) {
@@ -79,7 +84,7 @@ func (l *log4GoLogger) printf(ctx context.Context, format string, v ...interface
 		logStr = line
 	}
 
-	log.Output(3, logStr)
+	log.Output(4, logStr)
 }
 
 func getIdFromContext(ctx context.Context, idName string) string {
