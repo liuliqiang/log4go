@@ -1,5 +1,7 @@
 # log4go
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/liuliqiang/log4go)](https://goreportcard.com/report/github.com/liuliqiang/log4go)
+
 A log library for golang based on hashicorp/logutils
 
 ## Why log4go

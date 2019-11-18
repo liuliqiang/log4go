@@ -10,9 +10,13 @@ import (
 
 var defaultIdName = "x-log4go-id"
 var loggerMap map[string]Logger
+// debug log level
 var LogLevelDebug = logutils.LogLevel("DBUG")
+// info log level
 var LogLevelInfo = logutils.LogLevel("INFO")
+// warning log level
 var LogLevelWarn = logutils.LogLevel("WARN")
+// error log level
 var LogLevelError = logutils.LogLevel("EROR")
 var logLevel = []logutils.LogLevel{
 	LogLevelDebug, LogLevelInfo, LogLevelWarn, LogLevelError,
@@ -22,6 +26,7 @@ func init() {
 	loggerMap = map[string]Logger{}
 }
 
+// Interface for logger, you can implement your own logger with this.
 type Logger interface {
 	Debug(ctx context.Context, format string, v ...interface{})
 	Info(ctx context.Context, format string, v ...interface{})
@@ -31,11 +36,13 @@ type Logger interface {
 	GetFilter() (filter *logutils.LevelFilter)
 }
 
+// Options for logger.
 type LoggerOpts struct {
 	WithId bool
 	IdName string
 }
 
+// Create a named logger with specify options.
 func NewLogger(name string, opts *LoggerOpts) (logger Logger) {
 	var exists bool
 	if logger, exists = loggerMap[name]; !exists {
