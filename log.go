@@ -26,6 +26,8 @@ func (l *log4GoLogger) SetFilter(filter *logutils.LevelFilter) {
 	}
 
 	switch filter.MinLevel {
+	case LogLevelTrace:
+		fallthrough
 	case LogLevelDebug:
 		fallthrough
 	case LogLevelInfo:
@@ -39,6 +41,11 @@ func (l *log4GoLogger) SetFilter(filter *logutils.LevelFilter) {
 	}
 
 	log.SetOutput(l.filter)
+}
+
+func (l *log4GoLogger) Trace(ctx context.Context, format string, v ...interface{}) {
+	format = "[TRCE]" + format
+	l.printf(ctx, format, v...)
 }
 
 func (l *log4GoLogger) Debug(ctx context.Context, format string, v ...interface{}) {
