@@ -10,16 +10,24 @@ import (
 
 var defaultIdName = "x-log4go-id"
 var loggerMap map[string]Logger
+
+// trace log level
+var LogLevelTrace = logutils.LogLevel("TRCE")
+
 // debug log level
 var LogLevelDebug = logutils.LogLevel("DBUG")
+
 // info log level
 var LogLevelInfo = logutils.LogLevel("INFO")
+
 // warning log level
 var LogLevelWarn = logutils.LogLevel("WARN")
+
 // error log level
 var LogLevelError = logutils.LogLevel("EROR")
+
 var logLevel = []logutils.LogLevel{
-	LogLevelDebug, LogLevelInfo, LogLevelWarn, LogLevelError,
+	LogLevelTrace, LogLevelDebug, LogLevelInfo, LogLevelWarn, LogLevelError,
 }
 
 func init() {
@@ -28,6 +36,7 @@ func init() {
 
 // Interface for logger, you can implement your own logger with this.
 type Logger interface {
+	Trace(ctx context.Context, format string, v ...interface{})
 	Debug(ctx context.Context, format string, v ...interface{})
 	Info(ctx context.Context, format string, v ...interface{})
 	Warn(ctx context.Context, format string, v ...interface{})

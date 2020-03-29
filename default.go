@@ -12,6 +12,11 @@ func DefaultLogger() (logger Logger) {
 	return NewLogger("", nil)
 }
 
+// Logging strace log with default logger
+func Trace(format string, v ...interface{}) {
+	DefaultLogger().Trace(context.Background(), format, v...)
+}
+
 // Logging debug log with default logger
 func Debug(format string, v ...interface{}) {
 	DefaultLogger().Debug(context.Background(), format, v...)
