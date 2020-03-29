@@ -49,6 +49,26 @@ so i create log4go
     2019/08/10 00:02:18 [EROR]Failed to query record from db: db error
     ```
 
+## Dynamic change log level
+
+Just add a endpoint(such as http/grpc/...) to change log level such as:
+
+```
+http.HandleFunc("/logs", func(resp http.ResponseWriter, req *http.Request) {
+	switch req.URL.Query()["level"][0] {
+	case "debug":
+		log4go.SetLevel(log4go.LogLevelDebug)
+	case "info":
+		log4go.SetLevel(log4go.LogLevelInfo)
+	case "warning":
+		log4go.SetLevel(log4go.LogLevelWarn)
+	case "error":
+		log4go.SetLevel(log4go.LogLevelError)
+	}
+	return
+})
+```
+
 ## Learn more...
 
 - To be continue...
