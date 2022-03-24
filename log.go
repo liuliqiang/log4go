@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"sync"
 
 	"github.com/hashicorp/logutils"
 )
 
 type log4GoLogger struct {
+	mutex  sync.Mutex
 	filter *logutils.LevelFilter
 	opts   *LoggerOpts
 }
@@ -91,6 +93,8 @@ func (l *log4GoLogger) printf(ctx context.Context, format string, v ...interface
 		logStr = line
 	}
 
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
 	log.Output(4, logStr)
 }
 
