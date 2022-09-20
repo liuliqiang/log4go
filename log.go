@@ -10,6 +10,10 @@ import (
 	"github.com/hashicorp/logutils"
 )
 
+const (
+	builtInKeyError = "__liuliqiang_log4go_key_err"
+)
+
 type defaultField struct {
 	key string
 	val interface{}
@@ -19,6 +23,16 @@ type log4GoLogger struct {
 	filter *logutils.LevelFilter
 	fields []defaultField
 	opts   *LoggerOpts
+}
+
+func (l *log4GoLogger) WithError(err error) Logger {
+	// bug(@liuliqiang): multi logger with the same fields
+	l.fields = append(l.fields, defaultField{
+		key: builtInKeyError,
+		val: err,
+	})
+
+	return l
 }
 
 func (l *log4GoLogger) WithField(key string, val interface{}) Logger {

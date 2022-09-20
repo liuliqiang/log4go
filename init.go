@@ -45,6 +45,7 @@ type Logger interface {
 	GetFilter() (filter *logutils.LevelFilter)
 
 	WithField(key string, val interface{}) Logger
+	WithError(err error) Logger
 }
 
 // Options for logger.
