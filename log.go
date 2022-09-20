@@ -10,10 +10,25 @@ import (
 	"github.com/hashicorp/logutils"
 )
 
+type defaultField struct {
+	key string
+	val interface{}
+}
 type log4GoLogger struct {
 	mutex  sync.Mutex
 	filter *logutils.LevelFilter
+	fields []defaultField
 	opts   *LoggerOpts
+}
+
+func (l *log4GoLogger) WithField(key string, val interface{}) Logger {
+	// bug(@liuliqiang): multi logger with the same fields
+	l.fields = append(l.fields, defaultField{
+		key: key,
+		val: val,
+	})
+
+	return l
 }
 
 func (l *log4GoLogger) GetFilter() (filter *logutils.LevelFilter) {

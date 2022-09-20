@@ -43,6 +43,8 @@ type Logger interface {
 	Error(ctx context.Context, format string, v ...interface{})
 	SetFilter(filter *logutils.LevelFilter)
 	GetFilter() (filter *logutils.LevelFilter)
+
+	WithField(key string, val interface{}) Logger
 }
 
 // Options for logger.
