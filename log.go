@@ -25,6 +25,26 @@ type log4GoLogger struct {
 	opts   *LoggerOpts
 }
 
+func (l *log4GoLogger) Trace(format string, v ...interface{}) {
+	l.TraceCtx(context.Background(), format, v...)
+}
+
+func (l *log4GoLogger) Debug(format string, v ...interface{}) {
+	l.DebugCtx(context.Background(), format, v...)
+}
+
+func (l *log4GoLogger) Info(format string, v ...interface{}) {
+	l.InfoCtx(context.Background(), format, v...)
+}
+
+func (l *log4GoLogger) Warn(format string, v ...interface{}) {
+	l.WarnCtx(context.Background(), format, v...)
+}
+
+func (l *log4GoLogger) Error(format string, v ...interface{}) {
+	l.ErrorCtx(context.Background(), format, v...)
+}
+
 func (l *log4GoLogger) WithError(err error) Logger {
 	// bug(@liuliqiang): multi logger with the same fields
 	l.fields = append(l.fields, defaultField{
@@ -74,27 +94,27 @@ func (l *log4GoLogger) SetFilter(filter *logutils.LevelFilter) {
 	log.SetOutput(l.filter)
 }
 
-func (l *log4GoLogger) Trace(ctx context.Context, format string, v ...interface{}) {
+func (l *log4GoLogger) TraceCtx(ctx context.Context, format string, v ...interface{}) {
 	format = "[TRCE]" + format
 	l.printf(ctx, format, v...)
 }
 
-func (l *log4GoLogger) Debug(ctx context.Context, format string, v ...interface{}) {
+func (l *log4GoLogger) DebugCtx(ctx context.Context, format string, v ...interface{}) {
 	format = "[DBUG]" + format
 	l.printf(ctx, format, v...)
 }
 
-func (l *log4GoLogger) Info(ctx context.Context, format string, v ...interface{}) {
+func (l *log4GoLogger) InfoCtx(ctx context.Context, format string, v ...interface{}) {
 	format = "[INFO]" + format
 	l.printf(ctx, format, v...)
 }
 
-func (l *log4GoLogger) Warn(ctx context.Context, format string, v ...interface{}) {
+func (l *log4GoLogger) WarnCtx(ctx context.Context, format string, v ...interface{}) {
 	format = "[WARN]" + format
 	l.printf(ctx, format, v...)
 }
 
-func (l *log4GoLogger) Error(ctx context.Context, format string, v ...interface{}) {
+func (l *log4GoLogger) ErrorCtx(ctx context.Context, format string, v ...interface{}) {
 	format = "[EROR]" + format
 	l.printf(ctx, format, v...)
 }

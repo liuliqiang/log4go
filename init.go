@@ -36,11 +36,18 @@ func init() {
 
 // Interface for logger, you can implement your own logger with this.
 type Logger interface {
-	Trace(ctx context.Context, format string, v ...interface{})
-	Debug(ctx context.Context, format string, v ...interface{})
-	Info(ctx context.Context, format string, v ...interface{})
-	Warn(ctx context.Context, format string, v ...interface{})
-	Error(ctx context.Context, format string, v ...interface{})
+	Trace(format string, v ...interface{})
+	Debug(format string, v ...interface{})
+	Info(format string, v ...interface{})
+	Warn(format string, v ...interface{})
+	Error(format string, v ...interface{})
+
+	TraceCtx(ctx context.Context, format string, v ...interface{})
+	DebugCtx(ctx context.Context, format string, v ...interface{})
+	InfoCtx(ctx context.Context, format string, v ...interface{})
+	WarnCtx(ctx context.Context, format string, v ...interface{})
+	ErrorCtx(ctx context.Context, format string, v ...interface{})
+
 	SetFilter(filter *logutils.LevelFilter)
 	GetFilter() (filter *logutils.LevelFilter)
 

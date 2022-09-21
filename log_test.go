@@ -2,7 +2,6 @@ package log4go_test
 
 import (
 	"bytes"
-	"context"
 	"io"
 	"log"
 	"testing"
@@ -26,10 +25,10 @@ func TestLevelDebug(t *testing.T) {
 	logger.SetFilter(filter)
 	log.SetFlags(log.LstdFlags & 0x0)
 
-	logger.Debug(context.Background(), "1")
-	logger.Info(context.Background(), "3")
-	logger.Warn(context.Background(), "5")
-	logger.Error(context.Background(), "7")
+	logger.Debug("1")
+	logger.Info("3")
+	logger.Warn("5")
+	logger.Error("7")
 
 	result := buf.String()
 	expected := "[DBUG]1\n[INFO]3\n[WARN]5\n[EROR]7\n"
@@ -48,10 +47,10 @@ func TestLevelInfo(t *testing.T) {
 	logger.SetFilter(filter)
 	log.SetFlags(log.LstdFlags & 0x0)
 
-	logger.Debug(context.Background(), "1")
-	logger.Info(context.Background(), "3")
-	logger.Warn(context.Background(), "5")
-	logger.Error(context.Background(), "7")
+	logger.Debug("1")
+	logger.Info("3")
+	logger.Warn("5")
+	logger.Error("7")
 
 	result := buf.String()
 	expected := "[INFO]3\n[WARN]5\n[EROR]7\n"
@@ -70,10 +69,10 @@ func TestLevelWarn(t *testing.T) {
 	logger.SetFilter(filter)
 	log.SetFlags(log.LstdFlags & 0x0)
 
-	logger.Debug(context.Background(), "1")
-	logger.Info(context.Background(), "3")
-	logger.Warn(context.Background(), "5")
-	logger.Error(context.Background(), "7")
+	logger.Debug("1")
+	logger.Info("3")
+	logger.Warn("5")
+	logger.Error("7")
 
 	result := buf.String()
 	expected := "[WARN]5\n[EROR]7\n"
@@ -92,10 +91,10 @@ func TestLevelError(t *testing.T) {
 	logger.SetFilter(filter)
 	log.SetFlags(log.LstdFlags & 0x0)
 
-	logger.Debug(context.Background(), "1")
-	logger.Info(context.Background(), "3")
-	logger.Warn(context.Background(), "5")
-	logger.Error(context.Background(), "7")
+	logger.Debug("1")
+	logger.Info("3")
+	logger.Warn("5")
+	logger.Error("7")
 
 	result := buf.String()
 	expected := "[EROR]7\n"
