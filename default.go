@@ -2,7 +2,6 @@ package log4go
 
 import (
 	"context"
-	"log"
 
 	"github.com/hashicorp/logutils"
 )
@@ -46,7 +45,7 @@ func SetLevel(level logutils.LogLevel) {
 
 // Set logger flag for default logger
 func SetFlags(flag int) {
-	log.SetFlags(flag)
+	DefaultLogger().SetFlags(flag)
 }
 
 // Set logger filter for default logger

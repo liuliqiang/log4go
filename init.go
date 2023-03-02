@@ -4,31 +4,31 @@ import (
 	"context"
 	"log"
 	"os"
+	"sync"
 
 	"github.com/hashicorp/logutils"
 )
 
-var defaultIdName = "x-log4go-id"
-var loggerMap map[string]Logger
+var (
+	defaultIdName = "x-log4go-id"
+	loggerMu      sync.Mutex
+	loggerMap     map[string]Logger
+)
 
-// trace log level
-var LogLevelTrace = logutils.LogLevel("TRCE")
-
-// debug log level
-var LogLevelDebug = logutils.LogLevel("DBUG")
-
-// info log level
-var LogLevelInfo = logutils.LogLevel("INFO")
-
-// warning log level
-var LogLevelWarn = logutils.LogLevel("WARN")
-
-// error log level
-var LogLevelError = logutils.LogLevel("EROR")
-
-var logLevel = []logutils.LogLevel{
-	LogLevelTrace, LogLevelDebug, LogLevelInfo, LogLevelWarn, LogLevelError,
-}
+var (
+	LogLevelTrace = logutils.LogLevel("TRCE") // trace log level
+	LogLevelDebug = logutils.LogLevel("DBUG") // debug log level
+	LogLevelInfo  = logutils.LogLevel("INFO") // info log level
+	LogLevelWarn  = logutils.LogLevel("WARN") // warning log level
+	LogLevelError = logutils.LogLevel("EROR") // error log level
+	logLevel      = []logutils.LogLevel{
+		LogLevelTrace,
+		LogLevelDebug,
+		LogLevelInfo,
+		LogLevelWarn,
+		LogLevelError,
+	}
+)
 
 func init() {
 	loggerMap = map[string]Logger{}
@@ -41,6 +41,7 @@ type Logger interface {
 	Info(ctx context.Context, format string, v ...interface{})
 	Warn(ctx context.Context, format string, v ...interface{})
 	Error(ctx context.Context, format string, v ...interface{})
+	SetFlags(flags int)
 	SetFilter(filter *logutils.LevelFilter)
 	GetFilter() (filter *logutils.LevelFilter)
 }
@@ -54,14 +55,21 @@ type LoggerOpts struct {
 // Create a named logger with specify options.
 func NewLogger(name string, opts *LoggerOpts) (logger Logger) {
 	var exists bool
+
+	loggerMu.Lock()
+	defer loggerMu.Unlock()
+
 	if logger, exists = loggerMap[name]; !exists {
 		filter := &logutils.LevelFilter{
 			Levels:   logLevel,
 			MinLevel: LogLevelInfo,
 			Writer:   os.Stdout,
 		}
-		log.SetOutput(filter)
-		logger = &log4GoLogger{filter: filter, opts: formatOpts(opts)}
+		logger = &log4GoLogger{
+			stdLogger: log.New(filter, name, log.LstdFlags),
+			filter:    filter,
+			opts:      formatOpts(opts),
+		}
 		loggerMap[name] = logger
 	}
 

@@ -11,9 +11,10 @@ import (
 )
 
 type log4GoLogger struct {
-	mutex  sync.Mutex
-	filter *logutils.LevelFilter
-	opts   *LoggerOpts
+	stdLogger *log.Logger
+	mutex     sync.Mutex
+	filter    *logutils.LevelFilter
+	opts      *LoggerOpts
 }
 
 func (l *log4GoLogger) GetFilter() (filter *logutils.LevelFilter) {
@@ -42,7 +43,11 @@ func (l *log4GoLogger) SetFilter(filter *logutils.LevelFilter) {
 		l.filter.MinLevel = LogLevelInfo
 	}
 
-	log.SetOutput(l.filter)
+	l.stdLogger.SetOutput(l.filter)
+}
+
+func (l *log4GoLogger) SetFlags(flag int) {
+	l.stdLogger.SetFlags(flag)
 }
 
 func (l *log4GoLogger) Trace(ctx context.Context, format string, v ...interface{}) {
@@ -95,7 +100,7 @@ func (l *log4GoLogger) printf(ctx context.Context, format string, v ...interface
 
 	l.mutex.Lock()
 	defer l.mutex.Unlock()
-	log.Output(4, logStr)
+	l.stdLogger.Output(4, logStr)
 }
 
 func getIdFromContext(ctx context.Context, idName string) string {
