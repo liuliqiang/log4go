@@ -103,7 +103,7 @@ func (l *log4GoLogger) printf(ctx context.Context, format string, v ...interface
 	l.stdLogger.Output(4, logStr)
 }
 
-func getIdFromContext(ctx context.Context, idName string) string {
+func getIdFromContext(ctx context.Context, idName interface{}) string {
 	id, ok := ctx.Value(idName).(string)
 	if !ok {
 		return ""

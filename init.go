@@ -49,7 +49,7 @@ type Logger interface {
 // Options for logger.
 type LoggerOpts struct {
 	WithId bool
-	IdName string
+	IdName interface{}
 }
 
 // Create a named logger with specify options.

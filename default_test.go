@@ -2,7 +2,6 @@ package log4go_test
 
 import (
 	"bytes"
-	"log"
 	"testing"
 
 	"github.com/hashicorp/logutils"
@@ -16,7 +15,7 @@ func TestDefaultDebug(t *testing.T) {
 		Writer:   buf,
 	}
 	log4go.SetFilter(filter)
-	log4go.SetFlags(log.LstdFlags & 0x0)
+	log4go.SetFlags(0x0)
 
 	log4go.Debug("1")
 	log4go.Info("3")
@@ -31,7 +30,7 @@ func TestDefaultDebug(t *testing.T) {
 }
 
 func TestDefaultInfo(t *testing.T) {
-	log4go.SetFlags(log.LstdFlags & 0x0)
+	log4go.SetFlags(0x0)
 
 	buf := new(bytes.Buffer)
 	filter := &logutils.LevelFilter{
@@ -53,7 +52,7 @@ func TestDefaultInfo(t *testing.T) {
 }
 
 func TestDefaultWarn(t *testing.T) {
-	log4go.SetFlags(log.LstdFlags & 0x0)
+	log4go.SetFlags(0x0)
 
 	buf := new(bytes.Buffer)
 	filter := &logutils.LevelFilter{
@@ -75,7 +74,7 @@ func TestDefaultWarn(t *testing.T) {
 }
 
 func TestDefaultError(t *testing.T) {
-	log4go.SetFlags(log.LstdFlags & 0x0)
+	log4go.SetFlags(0x0)
 
 	buf := new(bytes.Buffer)
 	filter := &logutils.LevelFilter{

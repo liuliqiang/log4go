@@ -24,7 +24,7 @@ func TestLevelDebug(t *testing.T) {
 	}
 	logger := log4go.NewLogger("", nil)
 	logger.SetFilter(filter)
-	log.SetFlags(log.LstdFlags & 0x0)
+	log.SetFlags(0x0)
 
 	logger.Debug(context.Background(), "1")
 	logger.Info(context.Background(), "3")
@@ -46,7 +46,7 @@ func TestLevelInfo(t *testing.T) {
 	}
 	logger := log4go.NewLogger("", nil)
 	logger.SetFilter(filter)
-	log.SetFlags(log.LstdFlags & 0x0)
+	log.SetFlags(0x0)
 
 	logger.Debug(context.Background(), "1")
 	logger.Info(context.Background(), "3")
@@ -68,7 +68,7 @@ func TestLevelWarn(t *testing.T) {
 	}
 	logger := log4go.NewLogger("", nil)
 	logger.SetFilter(filter)
-	log.SetFlags(log.LstdFlags & 0x0)
+	log.SetFlags(0x0)
 
 	logger.Debug(context.Background(), "1")
 	logger.Info(context.Background(), "3")
@@ -90,7 +90,7 @@ func TestLevelError(t *testing.T) {
 	}
 	logger := log4go.NewLogger("", nil)
 	logger.SetFilter(filter)
-	log.SetFlags(log.LstdFlags & 0x0)
+	log.SetFlags(0x0)
 
 	logger.Debug(context.Background(), "1")
 	logger.Info(context.Background(), "3")
