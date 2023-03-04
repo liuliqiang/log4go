@@ -1,6 +1,12 @@
 # log4go
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/liuliqiang/log4go)](https://goreportcard.com/report/github.com/liuliqiang/log4go)
+[![GoDoc](https://pkg.go.dev/badge/github.com/liuliqiang/log4go?status.svg)](https://pkg.go.dev/github.com/liuliqiang/log4go?tab=doc)
+[![codecov](https://codecov.io/gh/liuliqiang/log4go/branch/master/graph/badge.svg)](https://codecov.io/gh/liuliqiang/log4go)
+[![Sourcegraph](https://sourcegraph.com/github.com/liuliqiang/log4go/-/badge.svg)](https://sourcegraph.com/github.com/liuliqiang/log4go?badge)
+[![Open Source Helpers](https://www.codetriage.com/liuliqiang/log4go/badges/users.svg)](https://www.codetriage.com/liuliqiang/log4go)
+[![Release](https://img.shields.io/github/release/liuliqiang/log4go.svg?style=flat-square)](https://github.com/liuliqiang/log4go/releases)
+[![TODOs](https://badgen.net/https/api.tickgit.com/badgen/github.com/liuliqiang/log4go)](https://www.tickgit.com/browse?repo=github.com/liuliqiang/log4go)
 
 A log library for golang based on hashicorp/logutils
 
