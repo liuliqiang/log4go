@@ -13,6 +13,7 @@ var (
 	defaultIdName = "x-log4go-id"
 	loggerMu      sync.Mutex
 	loggerMap     map[string]Logger
+	fieldPool     = newFieldsPool()
 )
 
 var (
@@ -41,9 +42,12 @@ type Logger interface {
 	Info(ctx context.Context, format string, v ...interface{})
 	Warn(ctx context.Context, format string, v ...interface{})
 	Error(ctx context.Context, format string, v ...interface{})
+
 	SetFlags(flags int)
 	SetFilter(filter *logutils.LevelFilter)
 	GetFilter() (filter *logutils.LevelFilter)
+
+	WithField(field, val string) Logger
 }
 
 // Options for logger.
@@ -65,12 +69,13 @@ func NewLogger(name string, opts *LoggerOpts) (logger Logger) {
 			MinLevel: LogLevelInfo,
 			Writer:   os.Stdout,
 		}
-		logger = &log4GoLogger{
+		l4g := &log4GoLogger{
 			stdLogger: log.New(filter, name, log.LstdFlags),
 			filter:    filter,
+			fields:    fieldPool.GetFields(0),
 			opts:      formatOpts(opts),
 		}
-		loggerMap[name] = logger
+		loggerMap[name] = l4g
 	}
 
 	return loggerMap[name]

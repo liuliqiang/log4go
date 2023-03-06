@@ -119,6 +119,24 @@ func TestNewLogger(t *testing.T) {
 	}
 }
 
+func TestWithFields(t *testing.T) {
+	logger, buf := newLogger("")
+	logger = logger.WithField("foo", "bar")
+	logger.Error(context.Background(), "1")
+
+	if buf.String() != "[EROR][foo=bar]1\n" {
+		t.Fatalf("bad output: %s", buf.String())
+	}
+
+	buf.Reset()
+	logger2 := logger.WithField("foo2", "bar2")
+	logger.Error(context.Background(), "1")
+	logger2.Error(context.Background(), "2")
+	if buf.String() != "[EROR][foo=bar]1\n[EROR][foo=bar][foo2=bar2]2\n" {
+		t.Fatalf("bad output: %s", buf.String())
+	}
+}
+
 func newLogger(name string) (log4go.Logger, *bytes.Buffer) {
 	buf := new(bytes.Buffer)
 	filter := &logutils.LevelFilter{
