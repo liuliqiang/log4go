@@ -77,7 +77,15 @@ http.HandleFunc("/logs", func(resp http.ResponseWriter, req *http.Request) {
 
 ## Print caller file and line
 
-Enable `WithCaller` in `LoggerOpts` to include the call site (`file.go:line`) in every log entry:
+For the default logger, call `SetWithCaller`:
+
+```go
+log4go.SetWithCaller(true)
+log4go.Error("something failed")
+// 2019/08/10 00:02:18 [EROR][main.go:42]something failed
+```
+
+For a named logger, set `WithCaller` in `LoggerOpts`:
 
 ```go
 logger := log4go.NewLogger("myapp", &log4go.LoggerOpts{WithCaller: true})
