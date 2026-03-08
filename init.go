@@ -46,14 +46,16 @@ type Logger interface {
 	SetFlags(flags int)
 	SetFilter(filter *logutils.LevelFilter)
 	GetFilter() (filter *logutils.LevelFilter)
+	SetWithCaller(enabled bool)
 
 	WithField(field, val string) Logger
 }
 
 // Options for logger.
 type LoggerOpts struct {
-	WithId bool
-	IdName interface{}
+	WithId     bool
+	IdName     interface{}
+	WithCaller bool // print the file:line of the log call site
 }
 
 // Create a named logger with specify options.

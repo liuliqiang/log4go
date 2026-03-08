@@ -3,8 +3,11 @@ package log4go_test
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"io"
 	"log"
+	"runtime"
+	"strings"
 	"testing"
 
 	"github.com/liuliqiang/log4go"
@@ -134,6 +137,26 @@ func TestWithFields(t *testing.T) {
 	logger2.Error(context.Background(), "2")
 	if buf.String() != "[EROR][foo=bar]1\n[EROR][foo=bar][foo2=bar2]2\n" {
 		t.Fatalf("bad output: %s", buf.String())
+	}
+}
+
+func TestWithCaller(t *testing.T) {
+	buf := new(bytes.Buffer)
+	filter := &logutils.LevelFilter{
+		MinLevel: log4go.LogLevelDebug,
+		Writer:   buf,
+	}
+	logger := log4go.NewLogger("caller-test", &log4go.LoggerOpts{WithCaller: true})
+	logger.SetFlags(0x0)
+	logger.SetFilter(filter)
+
+	_, _, wantLine, _ := runtime.Caller(0); wantLine++
+	logger.Error(context.Background(), "msg")
+
+	result := buf.String()
+	want := fmt.Sprintf("[EROR][log_test.go:%d]msg", wantLine)
+	if !strings.Contains(result, want) {
+		t.Fatalf("want output to contain %q, got %q", want, result)
 	}
 }
 

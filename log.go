@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"runtime"
 	"strings"
 	"sync"
 
@@ -51,6 +52,10 @@ func (l *log4GoLogger) SetFlags(flag int) {
 	l.stdLogger.SetFlags(flag)
 }
 
+func (l *log4GoLogger) SetWithCaller(enabled bool) {
+	l.opts.WithCaller = enabled
+}
+
 func (l *log4GoLogger) Trace(ctx context.Context, format string, v ...interface{}) {
 	format = "[TRCE]" + format
 	l.printf(ctx, format, v...)
@@ -95,38 +100,54 @@ func (l *log4GoLogger) WithField(field, val string) Logger {
 }
 
 func (l *log4GoLogger) printf(ctx context.Context, format string, v ...interface{}) {
-	var id string
-	var line string
-	var x, y int
+	line := fmt.Sprintf(format, v...)
 
-	line = fmt.Sprintf(format, v...)
+	// Build extra tags to insert after the level tag: [caller][id][fields...]
+	var extraTags string
+	if l.opts.WithCaller {
+		extraTags += "[" + callerInfo() + "]"
+	}
+	if l.opts.WithId {
+		extraTags += "[" + getIdFromContext(ctx, l.opts.IdName) + "]"
+	}
+	for _, field := range l.fields {
+		extraTags += "[" + field[0] + "=" + field[1] + "]"
+	}
 
-	var logStr string
-	if l.opts.WithId || len(l.fields) > 0 {
-		id = getIdFromContext(ctx, l.opts.IdName)
-		var tag string
-		if l.opts.WithId {
-			tag = "[" + id + "]"
-		}
-		var fieldStr string
-		for _, field := range l.fields {
-			fieldStr += "[" + field[0] + "=" + field[1] + "]"
-		}
-		// Check for a log level
-		x = strings.Index(line, "[")
-		if x >= 0 {
-			y = strings.Index(line[x:], "]")
-			if y >= 0 {
-				logStr = line[:x+y+1] + tag + fieldStr + line[x+y+1:]
+	logStr := line
+	if extraTags != "" {
+		if x := strings.Index(line, "["); x >= 0 {
+			if y := strings.Index(line[x:], "]"); y >= 0 {
+				logStr = line[:x+y+1] + extraTags + line[x+y+1:]
 			}
 		}
-	} else {
-		logStr = line
 	}
 
 	l.mutex.Lock()
 	defer l.mutex.Unlock()
 	l.stdLogger.Output(4, logStr)
+}
+
+// callerInfo returns "file.go:line" of the first call site outside this package.
+func callerInfo() string {
+	pcs := make([]uintptr, 10)
+	// skip: runtime.Callers, callerInfo, printf
+	n := runtime.Callers(3, pcs)
+	frames := runtime.CallersFrames(pcs[:n])
+	for {
+		frame, more := frames.Next()
+		if !strings.HasPrefix(frame.Function, "github.com/liuliqiang/log4go.") {
+			file := frame.File
+			if idx := strings.LastIndex(file, "/"); idx >= 0 {
+				file = file[idx+1:]
+			}
+			return fmt.Sprintf("%s:%d", file, frame.Line)
+		}
+		if !more {
+			break
+		}
+	}
+	return "??:0"
 }
 
 func getIdFromContext(ctx context.Context, idName interface{}) string {

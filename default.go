@@ -52,3 +52,8 @@ func SetFlags(flag int) {
 func SetFilter(filter *logutils.LevelFilter) {
 	DefaultLogger().SetFilter(filter)
 }
+
+// Enable or disable printing the caller file:line for default logger
+func SetWithCaller(enabled bool) {
+	DefaultLogger().SetWithCaller(enabled)
+}
